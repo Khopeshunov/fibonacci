@@ -31,11 +31,13 @@ pipeline {
                     if (isUnix()) {
                         sh "./scripts/fibonacci.sh ${params.NUMBER}"
                     } else {
-                        def workspace = env.WORKSPACE
-                        def drive = workspace[0].toLowerCase()
-                        def path = workspace.substring(2).replace('\\', '/').replace(' ', '\\ ')
-                        def scriptPath = "/${drive}/${path}/scripts/fibonacci.sh"
-                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" ${scriptPath} ${params.NUMBER}"
+                        def windowsPath = env.WORKSPACE.replace('\\', '/')
+                        def driveLetter = windowsPath[0].toLowerCase()
+                        def pathWithoutDrive = windowsPath.substring(2) // skip 'C:'
+                        def bashPath = "/${driveLetter}${pathWithoutDrive}"
+
+                        // No escaping inside the path, just wrap it in quotes
+                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" \"${bashPath}/scripts/fibonacci.sh\" ${params.NUMBER}"
                     }
                 }
             }
