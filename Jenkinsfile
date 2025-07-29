@@ -31,7 +31,8 @@ pipeline {
                     if (isUnix()) {
                         sh "./scripts/fibonacci.sh ${params.NUMBER}"
                     } else {
-                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" ./scripts/fibonacci.sh ${params.NUMBER}"
+                        def scriptPath = "${env.WORKSPACE.replace('\\', '/')}/scripts/fibonacci.sh"
+                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" ${scriptPath} ${params.NUMBER}"
                     }
                 }
             }
