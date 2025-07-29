@@ -3,7 +3,7 @@ pipeline {
     parameters {
         choice(name: 'NUMBER',
             choices: [10,20,30,40,50,60,70,80,90],
-            description: 'Select the value for F(n) for the Fibonnai sequence.')
+            description: 'Select the value for F(n) for the Fibonacci sequence.')
     }
     options {
         buildDiscarder(logRotator(daysToKeepStr: '10', numToKeepStr: '10'))
@@ -16,23 +16,23 @@ pipeline {
     stages {
         stage('Make executable') {
             steps {
-                bat('chmod +x ./scripts/fibonacci.sh')
+                script {
+                    if (isUnix()) {
+                        sh 'chmod +x ./scripts/fibonacci.sh'
+                    } else {
+                        echo 'Skipping chmod on Windows agent.'
+                    }
+                }
             }
         }
-        stage('Relative path') {
+        stage('Run Fibonacci Script') {
             steps {
-                bat("./scripts/fibonacci.sh ${env.NUMBER}")
-            }
-        }
-        stage('Full path') {
-            steps {
-                bat("${env.WORKSPACE}/scripts/fibonacci.sh ${env.NUMBER}")
-            }
-        }
-        stage('Change directory') {
-            steps {
-                dir("${env.WORKSPACE}/scripts"){
-                    bat("./fibonacci.sh ${env.NUMBER}")
+                script {
+                    if (isUnix()) {
+                        sh "./scripts/fibonacci.sh ${params.NUMBER}"
+                    } else {
+                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" ./scripts/fibonacci.sh ${params.NUMBER}"
+                    }
                 }
             }
         }
