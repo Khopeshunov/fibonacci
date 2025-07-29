@@ -32,7 +32,8 @@ pipeline {
                         sh "./scripts/fibonacci.sh ${params.NUMBER}"
                     } else {
                         def scriptPath = "${env.WORKSPACE.replace('\\', '/')}/scripts/fibonacci.sh"
-                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" ${scriptPath} ${params.NUMBER}"
+                        // Wrap the bash call in escaped double quotes
+                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" \"${scriptPath}\" ${params.NUMBER}"
                     }
                 }
             }
