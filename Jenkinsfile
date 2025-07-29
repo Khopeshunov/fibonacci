@@ -37,7 +37,7 @@ pipeline {
                         def bashPath = "/${driveLetter}${pathWithoutDrive}"
 
                         // No escaping inside the path, just wrap it in quotes
-                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" \"${bashPath}/scripts/fibonacci.bat\" ${params.NUMBER}"
+                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" \"${bashPath}/scripts/fibonacci.sh\" ${params.NUMBER}"
                     }
                 }
             }
