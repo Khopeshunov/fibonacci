@@ -31,9 +31,11 @@ pipeline {
                     if (isUnix()) {
                         sh "./scripts/fibonacci.sh ${params.NUMBER}"
                     } else {
-                        def scriptPath = "${env.WORKSPACE.replace('\\', '/')}/scripts/fibonacci.sh"
-                        // Wrap the bash call in escaped double quotes
-                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" \"${scriptPath}\" ${params.NUMBER}"
+                        def workspace = env.WORKSPACE
+                        def drive = workspace[0].toLowerCase()
+                        def path = workspace.substring(2).replace('\\', '/').replace(' ', '\\ ')
+                        def scriptPath = "/${drive}/${path}/scripts/fibonacci.sh"
+                        bat "\"C:\\Program Files\\Git\\bin\\bash.exe\" ${scriptPath} ${params.NUMBER}"
                     }
                 }
             }
